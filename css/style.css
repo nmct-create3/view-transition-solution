@@ -1,5 +1,3 @@
-@import "https://unpkg.com/open-props/easings.min.css";
-
 :root {
   --orange: #ff9637;
   --darkgreen: #005037;
@@ -44,14 +42,14 @@
   --space-xl: 3rem;
   --space-xxl: 4.5rem;
 
-  --ease-out: var(--ease-out-2);
-  --ease-in: var(--ease-in-2);
-  --ease: var(--ease-2);
+  --ease-accelerate: cubic-bezier(0.3, 0, 1, 1);
+  --ease-decelerate: cubic-bezier(0, 0, 0, 1);
+  --ease-standard: cubic-bezier(0.2, 0, 0, 1);
 
   --duration-xx-fast: 100ms;
-  --duration-x-fast: 150ms;
-  --duration-fast: 200ms;
-  --duration: 300ms;
+  --duration-x-fast: 200ms;
+  --duration-fast: 300ms;
+  --duration: 400ms;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -81,51 +79,15 @@
   }
 }
 
-@keyframes slide-from-left {
+@keyframes slide-from-right {
   from {
-    transform: translateX(-2rem);
+    transform: translateX(30px);
   }
 }
 
 @keyframes slide-to-left {
   to {
-    transform: translateX(-2rem);
-  }
-}
-
-@keyframes slide-from-right {
-  from {
-    transform: translateX(2rem);
-  }
-}
-
-@keyframes slide-to-right {
-  to {
-    transform: translateX(2rem);
-  }
-}
-
-@keyframes slide-from-bottom {
-  from {
-    transform: translateY(2rem);
-  }
-}
-
-@keyframes slide-to-bottom {
-  to {
-    transform: translateY(2rem);
-  }
-}
-
-@keyframes slide-to-top {
-  to {
-    transform: translateY(-2rem);
-  }
-}
-
-@keyframes slide-from-top {
-  from {
-    transform: translateY(-2rem);
+    transform: translateX(-30px);
   }
 }
 
@@ -141,30 +103,17 @@
   }
 }
 
-@keyframes fade-in {
-  from {
-    opacity: 0;
-  }
+::view-transition-old(root) {
+  animation: var(--duration-xx-fast) var(--ease-accelerate) both fade-out,
+    var(--duration) var(--ease-standard) both slide-to-left;
 }
 
-@keyframes fade-out {
-  to {
-    opacity: 0;
-  }
+::view-transition-new(root) {
+  animation: var(--duration-fast) var(--ease-decelerate) var(--duration-xx-fast) both fade-in,
+    var(--duration) var(--ease-standard) both slide-from-right;
 }
 
-@keyframes slide-from-bottom {
-  from {
-    transform: translateY(2rem);
-  }
-}
-
-@keyframes slide-to-top {
-  to {
-    transform: translateY(-2rem);
-  }
-}
-
+/*
 ::view-transition-old(root) {
   animation:
     var(--duration-xx-fast) var(--ease-in) both fade-out,
@@ -173,9 +122,9 @@
 
 ::view-transition-new(root) {
   animation:
-    var(--duration-fast) var(--ease-out) var(--duration-xx-fast) both fade-in,
+    var(--duration-fast) var(--ease-in) var(--duration-xx-fast) both fade-in,
     var(--duration) var(--ease) both slide-from-right;
-}
+} */
 
 /*
   Global styles
@@ -204,7 +153,9 @@ html {
 
 /* Responsive images */
 
-img {
+img,
+svg {
+  display: block;
   max-width: 100%;
   height: auto;
 }
@@ -420,7 +371,6 @@ hr {
   display: inline-block;
   text-decoration: none;
   color: var(--meta-text-color);
-  /* z-index: 20; */
 }
 
 .nav__link:hover,
@@ -431,24 +381,16 @@ hr {
 .nav__active {
   position: absolute;
   height: 1px;
-  /* aspect-ratio: 1/1; */
   bottom: 0;
   left: 0;
   right: 0;
-  /* border-radius: 100%; */
   background-color: var(--blue);
-  /* inset: -.2rem -1rem -.3rem; */
-  /* border-radius: 10rem; */
-  /* background-color: var(--page-text-color); */
-  /* background-color: var(--page-foreground-color); */
-  /* view-timeline-name: menu-active; */
   view-transition-name: menu-active;
-  /* z-index: 10; */
 }
 
 ::view-transition-group(menu-active) {
-  animation-duration: var(--duration-fast);
-  animation-timing-function: var(--ease);
+  animation-duration: var(--duration-x-fast);
+  animation-timing-function: var(--ease-decelerate);
 }
 
 /* Categories */
@@ -469,10 +411,7 @@ hr {
 .products {
   display: grid;
   gap: var(--space-m);
-
-  @media screen and (min-width: 40rem) {
-    grid-template-columns: repeat(12, 1fr);
-  }
+  grid-template-columns: repeat(12, 1fr);
 }
 
 .product {
@@ -493,6 +432,7 @@ hr {
 .product__title {
   font-size: 1rem;
   color: var(--page-text-color);
+  margin-top: auto;
 
   .product__link:hover & {
     color: var(--blue);
@@ -506,10 +446,9 @@ hr {
 
 .product__img {
   align-self: center;
-  transition: all .2s var(--ease-in);
+  transition: all var(--duration-x-fast) var(--ease-standard);
 
   .product__link:hover & {
-    transition-timing-function: var(--ease-out);
     transform: scale(1.05);
   }
 }
@@ -544,7 +483,7 @@ hr {
 
 .detail {
   /* display: grid; */
-  /* grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr)); */
+  /* grid-template-columns: repeat(auto-fit, minmax(25rem, 1fr)); */
   display: flex;
   flex-wrap: wrap;
   gap: var(--space-xl);
@@ -555,21 +494,21 @@ hr {
   view-transition-name: product-detail-image;
 }
 
-::view-transition-new(product-detail-image) {
-  animation:
-    var(--duration-fast) var(--ease-out) calc(var(--duration-x-fast) * 2) both fade-in,
-    var(--duration) var(--ease) both var(--duration-x-fast) scale-up;
-}
-
 ::view-transition-old(product-detail-image) {
   animation:
-    var(--duration-xx-fast) var(--ease-in) both fade-out,
-    var(--duration) var(--ease) both scale-down;
+    var(--duration-xx-fast) var(--ease-accelerate) both fade-out,
+    var(--duration-fast) var(--ease-standard) both scale-down;
+}
+
+::view-transition-new(product-detail-image) {
+  animation:
+    var(--duration-fast) var(--ease-decelerate) var(--duration-fast) both fade-in,
+    var(--duration-xx-fast) var(--ease-standard) both var(--duration-fast) scale-up;
 }
 
 .detail__image,
 .detail__body {
-  flex: 1 1 25rem;
+  flex: 1 1 30rem;
 }
 
 .detail__body {
