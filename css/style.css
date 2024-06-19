@@ -67,6 +67,10 @@
   View transition animations
 */
 
+@view-transition {
+  navigation: auto;
+}
+
 @keyframes fade-in {
   from {
     opacity: 0;
@@ -103,28 +107,24 @@
   }
 }
 
-::view-transition-old(root) {
+:root {
+  view-transition-name: none;
+}
+
+body {
+  view-transition-name: page;
+}
+
+
+::view-transition-old(page) {
   animation: var(--duration-xx-fast) var(--ease-accelerate) both fade-out,
     var(--duration) var(--ease-standard) both slide-to-left;
 }
 
-::view-transition-new(root) {
+::view-transition-new(page) {
   animation: var(--duration-fast) var(--ease-decelerate) var(--duration-xx-fast) both fade-in,
     var(--duration) var(--ease-standard) both slide-from-right;
 }
-
-/*
-::view-transition-old(root) {
-  animation:
-    var(--duration-xx-fast) var(--ease-in) both fade-out,
-    var(--duration) var(--ease) both slide-to-left;
-}
-
-::view-transition-new(root) {
-  animation:
-    var(--duration-fast) var(--ease-in) var(--duration-xx-fast) both fade-in,
-    var(--duration) var(--ease) both slide-from-right;
-} */
 
 /*
   Global styles
