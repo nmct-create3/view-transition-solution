@@ -107,6 +107,18 @@
   }
 }
 
+::view-transition-old(root) {
+  animation:
+    fade-out var(--duration-fast) var(--ease-accelerate),
+    slide-to-left var(--duration-fast) var(--ease-accelerate);
+}
+
+::view-transition-new(root) {
+  animation:
+    fade-in var(--duration-fast) var(--ease-decelerate),
+    slide-from-right var(--duration-fast) var(--ease-decelerate);
+}
+
 /*
   Global styles
 */
@@ -293,7 +305,7 @@ hr {
   left: 0;
   right: 0;
   background-color: var(--page-background-color);
-  /* view-transition-name: header; */
+  view-transition-name: header;
   z-index: 100;
 }
 
@@ -366,13 +378,13 @@ hr {
   left: 0;
   right: 0;
   background-color: var(--blue);
-  /* view-transition-name: menu-active; */
+  view-transition-name: menu-active;
 }
 
-/* ::view-transition-group(menu-active) {
+::view-transition-group(menu-active) {
   animation-duration: var(--duration-x-fast);
   animation-timing-function: var(--ease-decelerate);
-} */
+}
 
 /* Categories */
 
